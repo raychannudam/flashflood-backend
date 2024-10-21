@@ -1,0 +1,8 @@
+fastapi[standard]
+pyjwt
+sqlalchemy
+passlib[bcrypt]
+asyncpg
+influxdb-client
+paho-mqtt
+python-jose[cryptography]
