@@ -27,6 +27,12 @@ After actvate a virtual environment please continue to run `pip install -r requi
 
 ### Start Application
 
-To start a application, just simplify run `fastapi dev main.py`. The terminal output should be similar to the image below.
+- To start a application, just simplify run `fastapi dev main.py`. The terminal output should be similar to the image below.
 ![alt text](image-2.png)
+
+### Access the API document 
+
+- After the application is started, please refer to this url `http://127.0.0.1:8000/docs`.
+
+![alt text](image-3.png)
 
