@@ -1,0 +1,60 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# C extensions
+*.so
+
+# Virtual environment
+venv/
+env/
+
+# FastAPI application logs
+*.log
+
+# IDE / Editor files
+.idea/
+.vscode/
+*.swp
+
+# Local environment variables
+.env
+.env.*
+
+# Python package files
+*.egg-info/
+.eggs/
+dist/
+build/
+*.egg
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+
+# Pytest cache
+.pytest_cache/
+
+# Mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Static files (if using Starlette's static directory)
+staticfiles/
+
+# SQLite database files (if applicable)
+*.sqlite3
+*.db
+
+# Docker files (if using Docker)
+docker-compose.override.yml
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Pipfile
+Pipfile.lock
