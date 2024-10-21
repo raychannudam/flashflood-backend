@@ -7,7 +7,7 @@ This API application is built in fastApi which is a framework in Python. Before 
 ### Install virtual environment
 
 1. Please [click here](https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe) to download. Once the download is completed, please start to install and follow the process until finish the installation. 
-2. Next, after completing the installtion, try to run `conda --version` command in Windows Powershell prompt. If you get the result like below it means you are fine! But if not please continue to number 3.
+2. Next, after completing the installtion, try to run `conda --version` command in Windows Powershell prompt. If you get the result like below it means you are fine! But if not please continue to the rest.
 ![alt text](image.png)
 3. Please run `powershell -ExecutionPolicy ByPass -NoExit -Command "& 'C:\miniconda3\4.9.2\shell\condabin\conda-hook.ps1' ; conda activate 'C:\miniconda3\4.9.2' "` command in your Windows Prowershell prompt.
 4. Open <b>Anaconda PowerShell Prompt </b> from Start Menu.
