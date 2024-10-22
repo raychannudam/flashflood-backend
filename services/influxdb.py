@@ -21,12 +21,22 @@ def writeInfluxData(write_client, bucket, org, data):
         print(e)
         return False
     
-def getInfluxData(write_client, bucket, org, station, range:str="5m"):
+def getInfluxData(write_client, bucket, org, station, range:str="5m", measurement=""):
     try:
         query_api = write_client.query_api() 
-        query = f"""from(bucket: "{bucket}") 
-                |> range(start: -{range}) 
-                |> filter(fn: (r) => r.station == "{station}")"""
+        if measurement !="":
+            query = f"""from(bucket: "{bucket}") 
+                    |> range(start: -{range}) 
+                    |> filter(fn: (r) => 
+                        r.station == "{station}" and
+                        r._measurement == "{measurement}")"""
+        else:
+            query = f"""
+                    from(bucket: "{bucket}") 
+                    |> range(start: -{range}) 
+                    |> filter(fn: (r) => 
+                        r.station == "{station}")
+                    """
         tables = query_api.query(query, org=org)
         response = []
         for items in tables:

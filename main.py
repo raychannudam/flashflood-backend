@@ -93,19 +93,6 @@ mqtt_client.on_connect = on_mqtt_connect
 mqtt_client.on_message = on_mqtt_message
 
 
-# utils
-def store_image(save_name, image_data, db: Session = Depends(get_db)):
-    save_path = os.path.join('static', 'images', save_name)
-    with open(save_path, "wb") as image_file:
-        image_file.write(image_data)
-    image_create = ImageCreate()
-    image_create.name = save_name
-    db_image = Image(**image_create.dict())
-    db.add(db_image)
-    db.commit()
-    db.refresh(db_image)
-    return db_image
-
 
 
 # endpoints
@@ -147,8 +134,8 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
 
 
 @app.get("/influx")
-async def get_influx_data(station, range,  is_authenticated = Depends(get_current_user)):
-    result = getInfluxData(INFLUXDB_WRITE_CLIENT, INFLUXDB_BUCKET, INFLUXDB_ORG, station, range)
+async def get_influx_data(station, range, measurement,  is_authenticated = Depends(get_current_user)):
+    result = getInfluxData(INFLUXDB_WRITE_CLIENT, INFLUXDB_BUCKET, INFLUXDB_ORG, station, range, measurement)
     return result
 
 @app.post("/influx")
