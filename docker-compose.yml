@@ -1,0 +1,33 @@
+services:
+  influxdb2:
+    image: influxdb:2
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: raychannudam
+      DOCKER_INFLUXDB_INIT_PASSWORD: Ranger@2002
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: MyInitialAdminToken0==
+      DOCKER_INFLUXDB_INIT_ORG: ASEAN-MRC-TECHNOLOGY
+      DOCKER_INFLUXDB_INIT_BUCKET: sensors
+    ports:
+      - 8086:8086
+    networks:
+      - my_network
+      
+  fastapiapp:
+    image: fastapiapp
+    container_name: fastapiapp-container
+    build:
+      context: ./
+      dockerfile: Dockerfile.fastapi
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+     - influxdb2
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge

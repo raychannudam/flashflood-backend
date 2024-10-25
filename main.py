@@ -13,6 +13,7 @@ from services import *
 from deps import get_current_user
 import time
 from fastapi.middleware.cors import CORSMiddleware
+import requests
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -23,15 +24,14 @@ async def lifespan(app: FastAPI):
 origins = [
     "http://127.0.0.1:8080",
     "http://localhost:8080",
-    
 ]
 
 
 # app
 app = FastAPI(
-    title="MRC Flash Floods Monitoring API Application",               # Custom title
-    description="This is an API application serves as a backend.",  # Custom description
-    version="1.0.0",                     # Custom version
+    title="MRC Flash Floods Monitoring API Application",             
+    description="This is an API application serves as a backend.",  
+    version="1.0.0",                    
     contact={
         "name": "Support Team",
         "tel": "+855-17-701-656",
@@ -150,6 +150,19 @@ async def store_influx_data(data: InfluxDataCreate,  is_authenticated = Depends(
     return {
         "response": "fail"
     }, 500
+
+@app.get("/pred-water-level")
+async def pred_water_level(forward:int, is_authenticated = Depends(get_current_user)):
+    url = f"https://kay168-water-level-forecast.hf.space/predict?forward={forward}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        return {
+            'data':response.json()
+        }
+    else:
+        return {
+            "message": response.text
+        }
 
 
 
