@@ -12,7 +12,22 @@ services:
       - 8086:8086
     networks:
       - my_network
-      
+
+  # mqttservice:
+  #   image: mqttservice
+  #   container_name: mqttservice-container
+  #   build:
+  #     context: ./
+  #     dockerfile: Dockerfile.mqtt
+  #   volumes:
+  #     - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+  #     - ./mosquitto/data:/mosquitto/data 
+  #     - ./mosquitto/log:/mosquitto/log  
+  #   ports:
+  #     - "1883:1883"
+  #   networks:
+  #    - my_network
+
   fastapiapp:
     image: fastapiapp
     container_name: fastapiapp-container
@@ -25,6 +40,7 @@ services:
       - "8000:8000"
     depends_on:
      - influxdb2
+    #  - mqttservice
     networks:
       - my_network
 

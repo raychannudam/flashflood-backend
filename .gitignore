@@ -58,3 +58,5 @@ docker-compose.override.yml
 
 # Pipfile
 Pipfile.lock
+
+static/images

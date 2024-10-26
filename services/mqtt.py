@@ -7,6 +7,12 @@ MQTT_CLUSTER_USERNAME = "raychannudam"
 MQTT_CLUSTER_PASSWORD = "Ranger@2002"
 
 
+# MQTT_CLUSTER_URL = "localhost"
+# MQTT_CLUSTER_PORT = 1883
+# MQTT_CLUSTER_USERNAME = "admin"
+# MQTT_CLUSTER_PASSWORD = "admin"
+
+
 def on_mqtt_subscribe(client, userdata, mid, granted_qos, properties=None):
     print("Subscribed: " + str(mid) + " " + str(granted_qos))
 

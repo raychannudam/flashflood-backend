@@ -1,0 +1,11 @@
+FROM eclipse-mosquitto
+
+RUN mkdir -p /mosquitto/config
+
+RUN touch /mosquitto/config/password_file
+
+RUN mosquitto_passwd -b /mosquitto/config/password_file admin admin
+
+EXPOSE 1883
+
+CMD ["/usr/sbin/mosquitto", "-c", "/mosquitto/config/mosquitto.conf"]
