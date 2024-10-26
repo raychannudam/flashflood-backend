@@ -4,11 +4,13 @@ import pytz
 cambodia_tz = pytz.timezone('Asia/Phnom_Penh')
 
 
-INFLUXDB_TOKEN="fgB6MHfAZd25DoxbFVOHUJXtvLxXD4hZMm6QCckn8TEJhL7nO0GnRFSBAvxYU_o7lq9nyaksg2spvhV-a5EF-A=="
-# INFLUXDB_TOKEN = "MyInitialAdminToken0=="
+# INFLUXDB_TOKEN="fgB6MHfAZd25DoxbFVOHUJXtvLxXD4hZMm6QCckn8TEJhL7nO0GnRFSBAvxYU_o7lq9nyaksg2spvhV-a5EF-A=="
+# INFLUXDB_URL = "http://localhost:8086"
+
+INFLUXDB_TOKEN = "MyInitialAdminToken0=="
+INFLUXDB_URL = "http://influxdb2:8086"
+
 INFLUXDB_ORG = "ASEAN-MRC-TECHNOLOGY"
-INFLUXDB_URL = "http://localhost:8086"
-# INFLUXDB_URL = "http://influxdb2:8086"
 INFLUXDB_BUCKET = "sensors"
 INFLUXDB_WRITE_CLIENT = influxdb_client.InfluxDBClient(url=INFLUXDB_URL, token=INFLUXDB_TOKEN, org=INFLUXDB_ORG)
 
@@ -60,11 +62,3 @@ def getInfluxData(write_client, bucket, org, station, range:str="5m", measuremen
         print("Fail to get data from influx in bucket", bucket)
         print(e)
         return e
-        
-
-
-
-
-
-
-
