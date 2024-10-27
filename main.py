@@ -98,7 +98,7 @@ mqtt_client.on_message = on_mqtt_message
 
 # endpoints
 @app.post("/users", response_model=UserResponse)
-async def create_user(user: UserCreate, is_authenticated = Depends(get_current_user), db: Session = Depends(get_db)):
+async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     user.password = get_hashed_password(user.password)
     db_user = User(**user.dict())
     db.add(db_user)
