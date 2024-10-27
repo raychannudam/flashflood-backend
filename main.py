@@ -14,6 +14,7 @@ from deps import get_current_user
 import time
 from fastapi.middleware.cors import CORSMiddleware
 import requests
+from fastapi.responses import FileResponse
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -138,6 +139,17 @@ async def get_influx_data(station, range, measurement,  is_authenticated = Depen
     result = getInfluxData(INFLUXDB_WRITE_CLIENT, INFLUXDB_BUCKET, INFLUXDB_ORG, station, range, measurement)
     return result
 
+@app.get("/influx/image")
+async def get_image_data(station, range, is_authenticated = Depends(get_current_user)):
+    result = getInfluxData(INFLUXDB_WRITE_CLIENT, INFLUXDB_BUCKET, INFLUXDB_ORG, station, range, "image")
+    image_name = result['data'][0]['_value'] + ".jpg"
+    file_path = os.path.join("static/images", image_name)
+    if os.path.isfile(file_path):
+        return FileResponse(file_path, media_type="image/jpeg")
+    return {
+        "message": "Image not found"
+    }
+
 @app.post("/influx")
 async def store_influx_data(data: InfluxDataCreate,  is_authenticated = Depends(get_current_user)):
     data_point = (
@@ -163,6 +175,4 @@ async def pred_water_level(forward:int, is_authenticated = Depends(get_current_u
         return {
             "message": response.text
         }
-
-
-
+    

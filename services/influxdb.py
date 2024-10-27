@@ -29,11 +29,20 @@ def getInfluxData(write_client, bucket, org, station, range:str="5m", measuremen
     try:
         query_api = write_client.query_api() 
         if measurement !="":
-            query = f"""from(bucket: "{bucket}") 
-                    |> range(start: -{range}) 
-                    |> filter(fn: (r) => 
-                        r.station == "{station}" and
-                        r._measurement == "{measurement}")"""
+            if measurement == "image":
+                query = f"""from(bucket: "{bucket}") 
+                        |> range(start: -{range}) 
+                        |> filter(fn: (r) => 
+                            r.station == "{station}" and
+                            r._measurement == "{measurement}")
+                        |> aggregateWindow(every: {range}, fn: last, createEmpty: false)
+                        |> yield(name: "last")"""
+            else:
+                query = f"""from(bucket: "{bucket}") 
+                        |> range(start: -{range}) 
+                        |> filter(fn: (r) => 
+                            r.station == "{station}" and
+                            r._measurement == "{measurement}")"""
         else:
             query = f"""
                     from(bucket: "{bucket}") 
@@ -62,3 +71,4 @@ def getInfluxData(write_client, bucket, org, station, range:str="5m", measuremen
         print("Fail to get data from influx in bucket", bucket)
         print(e)
         return e
+
