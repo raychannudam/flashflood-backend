@@ -28,7 +28,10 @@ origins = [
     "http://localhost:8080",
     "http://localhost",
     "http://floodalert.live",
-    "https://floodalert.live"
+    "https://floodalert.live",
+    "http://dashboard.floodalert.live",
+    "https://dashboard.floodalert.live",
+
 ]
 
 
