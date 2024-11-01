@@ -2,20 +2,18 @@ from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
 
-class UserCreate(BaseModel):
+class TelegramAccountCreate(BaseModel):
+    user_id: int
     username: str = Field(..., max_length=50)
-    email: str = Field(..., max_length=255)
-    password: str = Field(..., max_length=50)
 
-class UserUpdate(BaseModel):
+class TelegramAccountUpdate(BaseModel):
     username: Optional[str] = Field(None, max_length=50)
-    email: Optional[str] = Field(None, max_length=255)
     status: Optional[bool] = True
 
-class UserResponse(BaseModel):
+class TelegramAccountResponse(BaseModel):
     id: int
+    user_id: int
     username: str
-    email: str
     status: bool
     created_at: datetime
     updated_at: datetime

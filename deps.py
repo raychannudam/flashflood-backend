@@ -3,16 +3,16 @@ from datetime import datetime
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from utils.jwt import ALGORITHM, JWT_SECRET_KEY
-from databases import get_db
+from models import get_db
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
-from databases import User
+from models import User
 
 from jose import jwt
 from pydantic import ValidationError
 
 reuseable_oauth = OAuth2PasswordBearer(
-    tokenUrl="/login",
+    tokenUrl="/api/login",
     scheme_name="JWT"
 )
 
@@ -48,4 +48,4 @@ async def get_current_user(token: str = Depends(reuseable_oauth), db: Session = 
             detail="Could not find user",
         )
 
-    return True
+    return user
