@@ -15,23 +15,27 @@ import time
 from fastapi.middleware.cors import CORSMiddleware
 import requests
 from fastapi.responses import FileResponse
+import threading
+
+def start_mqtt():
+    mqtt_client.loop_start()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    mqtt_client.loop_start()
+    mqtt_thread = threading.Thread(target=start_mqtt)
+    mqtt_thread.start()
     yield
-    mqtt_client.loop_stop()
+    mqtt_client.disconnect()
+    mqtt_thread.join()
 
 origins = [
     "http://127.0.0.1:8080",
     "http://127.0.0.1",
     "http://localhost:8080",
     "http://localhost",
-    "http://floodalert.live",
     "https://floodalert.live",
-    "http://dashboard.floodalert.live",
     "https://dashboard.floodalert.live",
-
+    "https://telegram.floodalert.live",
 ]
 
 
@@ -54,8 +58,8 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    # allow_origins=origins,
-    allow_origins=["*"],
+    allow_origins=origins,
+    # allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

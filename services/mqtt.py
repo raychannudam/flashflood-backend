@@ -24,7 +24,7 @@ def on_mqtt_publish(client, userdata, mid, properties=None):
 mqtt_client = paho.Client(client_id="backend_server", userdata=None, protocol=paho.MQTTv5)
 mqtt_client.tls_set(tls_version=mqtt.client.ssl.PROTOCOL_TLS)
 mqtt_client.username_pw_set(MQTT_CLUSTER_USERNAME, MQTT_CLUSTER_PASSWORD)
-mqtt_client.connect(MQTT_CLUSTER_URL, MQTT_CLUSTER_PORT)
+mqtt_client.connect(MQTT_CLUSTER_URL, MQTT_CLUSTER_PORT, keepalive=60)
 mqtt_client.on_subscribe = on_mqtt_subscribe
 mqtt_client.on_publish = on_mqtt_publish
         
