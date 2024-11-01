@@ -8,6 +8,8 @@ services:
       DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: MyInitialAdminToken0==
       DOCKER_INFLUXDB_INIT_ORG: ASEAN-MRC-TECHNOLOGY
       DOCKER_INFLUXDB_INIT_BUCKET: sensors
+    volumes:
+      - ./influx/data:/var/lib/influxdb2
     ports:
       - 8086:8086
     networks:
