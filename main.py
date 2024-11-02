@@ -28,6 +28,7 @@ def start_mqtt():
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     Base.metadata.create_all(bind=engine)
+    run_populate()
     mqtt_thread = threading.Thread(target=start_mqtt)
     mqtt_thread.start()
     yield
