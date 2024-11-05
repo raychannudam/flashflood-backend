@@ -25,6 +25,7 @@ SMSCHEF_API_KEY = "cda7a6cbe5e82668ae4b3f6c080e7580b6894a2e"
 # app initialization
 def start_mqtt():
     mqtt_client.loop_start()
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     Base.metadata.create_all(bind=engine)
@@ -71,36 +72,46 @@ app.add_middleware(
 def on_mqtt_connect(client, userdata, flags, rc, properties=None):
     print("CONNECT received with code %s." % rc)
     mqtt_client.subscribe('mrc/bassac')
+
 image_string = ""
 last_received_time = time.time()
 def on_mqtt_message(client, userdata, msg):
-    # print(msg.topic + " " + str(msg.qos) + " " + str(msg.payload))
-    topic = str(msg.topic)
-    payload = str(msg.payload.decode('utf-8'))
-    measurement = payload.split("-")[1]
-    value = payload.split("-")[2]
-    station = topic.split("/")[1]
-    if measurement != "image":
-        value = float(value)
-        data = Point(measurement).tag("station", station).field("data", value)
-        if writeInfluxData(INFLUXDB_WRITE_CLIENT, INFLUXDB_BUCKET, INFLUXDB_ORG, data):
-            print(f"Write data of measurement : {measurement} from station : {station} with value : {value} to influxdb.")
-    else:
+    try:
         global image_string
-        global last_received_time
-        if value == "reset":
-            byte_string = image_string.encode('utf-8')
-            image_data = base64.b64decode(byte_string)
-            name = uuid.uuid4()
-            with open(f"static/images/{name}.jpg", 'wb') as file:
-                file.write(image_data)
-                file.close()
-            data = Point(measurement).tag("station", station).field("data", str(name))
+        topic = str(msg.topic)
+        try:
+            payload = str(msg.payload.decode('utf-8'))
+        except Exception as e:
+            print("Erro decoding payload")
+        measurement = payload.split("|")[1]
+        value = payload.split("|")[2]
+        station = topic.split("/")[1]
+        if measurement != "image":
+            image_string = ""
+            value = float(value)
+            data = Point(measurement).tag("station", station).field("data", value)
             if writeInfluxData(INFLUXDB_WRITE_CLIENT, INFLUXDB_BUCKET, INFLUXDB_ORG, data):
                 print(f"Write data of measurement : {measurement} from station : {station} with value : {value} to influxdb.")
-            image_string = ""
         else:
-            image_string = image_string + value
+            if value == "reset":
+                print(image_string)
+                # image_string = image_string.encode('utf-8')
+                padding_needed = len(image_string) % 4
+                if padding_needed != 0:
+                    image_string += "=" * (4 - padding_needed)
+                image_data = base64.b64decode(image_string)
+                name = uuid.uuid4()
+                with open(f"static/images/{name}.jpg", 'wb') as file:
+                    file.write(image_data)
+                    file.close()
+                data = Point(measurement).tag("station", station).field("data", str(name))
+                if writeInfluxData(INFLUXDB_WRITE_CLIENT, INFLUXDB_BUCKET, INFLUXDB_ORG, data):
+                    print(f"Write data of measurement : {measurement} from station : {station} with value : {value} to influxdb.")
+                image_string = ""
+            else:
+                image_string = image_string + value
+    except Exception as e:
+        print(e)
 mqtt_client.on_connect = on_mqtt_connect    
 mqtt_client.on_message = on_mqtt_message
 
