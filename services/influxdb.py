@@ -9,6 +9,7 @@ cambodia_tz = pytz.timezone('Asia/Phnom_Penh')
 
 INFLUXDB_TOKEN = "MyInitialAdminToken0=="
 INFLUXDB_URL = "http://influxdb2:8086"
+# INFLUXDB_URL = "http://localhost:8086"
 
 INFLUXDB_ORG = "ASEAN-MRC-TECHNOLOGY"
 INFLUXDB_BUCKET = "sensors"

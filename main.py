@@ -19,6 +19,7 @@ import requests
 import threading
 import requests
 from routers import alert_service, influx, phone_number, telegram_account, user
+import os
 
 SMSCHEF_API_KEY = "cda7a6cbe5e82668ae4b3f6c080e7580b6894a2e"
 
@@ -101,7 +102,8 @@ def on_mqtt_message(client, userdata, msg):
                     image_string += "=" * (4 - padding_needed)
                 image_data = base64.b64decode(image_string)
                 name = uuid.uuid4()
-                with open(f"static/images/{name}.jpg", 'wb') as file:
+                save_path = os.path.join("static", "images", f"{name}.jpg")
+                with open(save_path, 'wb') as file:
                     file.write(image_data)
                     file.close()
                 data = Point(measurement).tag("station", station).field("data", str(name))
