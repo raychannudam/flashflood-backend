@@ -29,10 +29,15 @@ async def get_influx_data(station, range, measurement):
 @router.get("/image")
 async def get_image_data(station, range):
     result = getInfluxData(INFLUXDB_WRITE_CLIENT, INFLUXDB_BUCKET, INFLUXDB_ORG, station, range, "image")
-    image_name = result['data'][0]['_value'] + ".jpg"
-    file_path = os.path.join("static/images", image_name)
-    if os.path.isfile(file_path):
-        return FileResponse(file_path, media_type="image/jpeg")
-    return {
-        "message": "Image not found"
-    }
+    if len(result['data']) > 0:
+        image_name = result['data'][0]['_value'] + ".jpg"
+        file_path = os.path.join("static/images", image_name)
+        if os.path.isfile(file_path):
+            return FileResponse(file_path, media_type="image/jpeg")
+        return {
+            "message": "Image not found"
+        }
+    else:
+        return {
+            "message": "Image not found"
+        }
