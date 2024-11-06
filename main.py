@@ -20,6 +20,7 @@ import threading
 import requests
 from routers import alert_service, influx, phone_number, telegram_account, user
 import os
+import re
 
 SMSCHEF_API_KEY = "cda7a6cbe5e82668ae4b3f6c080e7580b6894a2e"
 
@@ -83,6 +84,7 @@ def on_mqtt_message(client, userdata, msg):
         try:
             payload = str(msg.payload.decode('utf-8'))
         except Exception as e:
+            payload = "-|error|error"
             print("Erro decoding payload")
         measurement = payload.split("|")[1]
         value = payload.split("|")[2]
@@ -96,7 +98,7 @@ def on_mqtt_message(client, userdata, msg):
         else:
             if value == "reset":
                 print(image_string)
-                # image_string = image_string.encode('utf-8')
+                image_string = re.sub(r'[^A-Za-z0-9+./=]', '', image_string)
                 padding_needed = len(image_string) % 4
                 if padding_needed != 0:
                     image_string += "=" * (4 - padding_needed)
@@ -111,6 +113,8 @@ def on_mqtt_message(client, userdata, msg):
                     print(f"Write data of measurement : {measurement} from station : {station} with value : {value} to influxdb.")
                 image_string = ""
             else:
+                if value == "error":
+                    image_string = image_string
                 image_string = image_string + value
     except Exception as e:
         print(e)
