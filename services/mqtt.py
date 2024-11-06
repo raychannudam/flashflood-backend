@@ -1,5 +1,6 @@
 import paho.mqtt.client as paho
 from paho import mqtt
+import time
 
 MQTT_CLUSTER_URL = "620e8b73916a4c0faabaa8b1e3f4812f.s1.eu.hivemq.cloud"
 MQTT_CLUSTER_PORT = 8883
@@ -21,7 +22,7 @@ def on_mqtt_publish(client, userdata, mid, properties=None):
     print("mid: " + str(mid))
 
 
-mqtt_client = paho.Client(client_id="backend_server", userdata=None, protocol=paho.MQTTv5)
+mqtt_client = paho.Client(client_id=f"backend_server_{int(time.time())}", userdata=None, protocol=paho.MQTTv5)
 mqtt_client.tls_set(tls_version=mqtt.client.ssl.PROTOCOL_TLS)
 mqtt_client.username_pw_set(MQTT_CLUSTER_USERNAME, MQTT_CLUSTER_PASSWORD)
 mqtt_client.connect(MQTT_CLUSTER_URL, MQTT_CLUSTER_PORT, keepalive=60)
