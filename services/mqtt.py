@@ -22,7 +22,7 @@ def on_mqtt_publish(client, userdata, mid, properties=None):
     print("mid: " + str(mid))
 
 
-mqtt_client = paho.Client(client_id=f"backend_server_{int(time.time())}", userdata=None, protocol=paho.MQTTv5)
+mqtt_client = paho.Client(client_id=f"backend_server_prod", userdata=None, protocol=paho.MQTTv5)
 mqtt_client.tls_set(tls_version=mqtt.client.ssl.PROTOCOL_TLS)
 mqtt_client.username_pw_set(MQTT_CLUSTER_USERNAME, MQTT_CLUSTER_PASSWORD)
 mqtt_client.connect(MQTT_CLUSTER_URL, MQTT_CLUSTER_PORT, keepalive=60)
